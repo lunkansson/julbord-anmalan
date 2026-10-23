@@ -12,8 +12,17 @@ a:hover { color: var(--color-accent-200); }
 
 .layout {
   position: relative; max-width: 1120px; margin: 0 auto; padding: 80px 28px 96px;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
-  gap: 64px; align-items: start;
+  display: grid; grid-template-columns: 1fr; gap: 64px; align-items: start;
+}
+/* Phones: intro, form + photo, then who's signed up. Wider: the list sits under the intro in the left column. */
+@media (min-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; column-gap: 64px; row-gap: 28px;
+    grid-template-areas: "intro aside" "attendees aside";
+  }
+  .intro { grid-area: intro; }
+  .aside { grid-area: aside; }
+  .attendees { grid-area: attendees; }
 }
 
 /* Left column */
