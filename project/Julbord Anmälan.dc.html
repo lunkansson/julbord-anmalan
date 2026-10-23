@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nocturne-96f55af4-d4de-4a6e-95bd-0b47735a4aac/styles.css">
+<script src="_ds/nocturne-96f55af4-d4de-4a6e-95bd-0b47735a4aac/_ds_bundle.js"></script>
+<style>
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); }
+a { color: var(--color-accent-300); } a:hover { color: var(--color-accent-200); }
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; overflow: hidden; background: radial-gradient(120% 70% at 15% 0%, var(--color-section) 0%, var(--color-bg) 62%);">
+  <canvas ref="{{ snowRef }}" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+
+  <header style="position: relative; max-width: 1120px; margin: 0 auto; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+    <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; letter-spacing: 0.02em;">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent-200); box-shadow: 0 0 12px 3px var(--color-accent);"></span>
+      Konsultjulbord 2026
+    </div>
+  </header>
+
+  <main style="position: relative; max-width: 1120px; margin: 0 auto; padding: 48px 28px 96px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 64px; align-items: start;">
+    <section style="display: flex; flex-direction: column; gap: 28px; padding-top: 12px;">
+      <div style="font-size: 18px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-300);">Välkommen till årets julbord</div>
+      <h1 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(44px, 7vw, 76px); line-height: 1.02; letter-spacing: -0.03em; text-wrap: balance;">God jul på<img src="assets/liseberg-logo.png" alt="Liseberg" style="display: block; width: min(100%, 420px); height: auto; margin-top: 18px;"></img></h1>
+      <p style="margin: 0; max-width: 46ch; font-size: 17px; line-height: 1.6; color: var(--color-neutral-300); text-wrap: pretty;">Ljusslingor, glögg och ett dukat julbord. Vi samlar alla konsulter för en kväll tillsammans — anmäl dig senast 28 oktober så vi kan boka rätt antal platser.</p>
+
+      <div style="height: 1px; max-width: 460px; background: linear-gradient(90deg, var(--color-divider) 0%, var(--color-divider) 70%, transparent 100%);"></div>
+
+      <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 32px; row-gap: 14px; font-size: 15px; max-width: 460px;">
+        <dt style="color: var(--color-neutral-500);">Datum</dt><dd style="margin: 0;">Torsdag 10 december</dd>
+        <dt style="color: var(--color-neutral-500);">Tid</dt><dd style="margin: 0;">18.00 – sent</dd>
+        <dt style="color: var(--color-neutral-500);">Plats</dt><dd style="margin: 0;">Liseberg, Göteborg</dd>
+        <dt style="color: var(--color-neutral-500);">Sista anmälan</dt><dd style="margin: 0;">28 oktober</dd>
+      </dl>
+    </section>
+
+    <div style="display: flex; flex-direction: column; gap: 28px;">
+    <section class="card elev-lg" style="padding: 32px; display: flex; flex-direction: column; gap: 22px; border: 1px solid var(--color-divider); background: color-mix(in srgb, var(--color-surface) 88%, transparent); backdrop-filter: blur(6px);">
+      <sc-if value="{{ showClosed }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <h2 style="margin: 0; font-weight: 500; font-size: 24px;">Anmälan är stängd</h2>
+          <p style="margin: 0; color: var(--color-neutral-300); line-height: 1.6;">Sista dag för anmälan har passerat. Hör av dig till din kontaktperson om du ändå vill följa med.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showDone }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <div style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-accent-300);">Tack, {{ firstName }}</div>
+          <h2 style="margin: 0; font-weight: 500; font-size: 28px; line-height: 1.2;">{{ doneTitle }}</h2>
+          <p style="margin: 0; color: var(--color-neutral-300); line-height: 1.6;">{{ doneBody }}</p>
+          <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 24px; row-gap: 10px; font-size: 14px; padding: 16px; border-radius: var(--radius-md); background: var(--color-accent-900);">
+            <dt style="color: var(--color-neutral-500);">Namn</dt><dd style="margin: 0;">{{ form.name }}</dd>
+          </dl>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-secondary" onClick="{{ edit }}">Ändra anmälan</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submit }}" style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <h2 style="margin: 0; font-weight: 500; font-size: 24px;">Anmäl dig</h2>
+          </div>
+
+          <div class="field"><label for="f-name">Namn</label>
+            <input class="input" id="f-name" placeholder="För- och efternamn" value="{{ form.name }}" onChange="{{ onName }}"></input></div>
+
+
+          <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size: 13px; color: var(--color-accent-200); padding: 10px 12px; border-radius: var(--radius-md); background: var(--color-accent-900);">{{ error }}</div>
+          </sc-if>
+
+          <button type="submit" class="btn btn-primary btn-block" style="height: 44px; font-size: 15px;">{{ submitLabel }}</button>
+        </form>
+      </sc-if>
+    </section>
+      <figure style="margin: 0; display: flex; flex-direction: column; gap: 10px;">
+        <img src="assets/1923.png" alt="Restaurang 1923 på Liseberg i vinterskrud" style="display: block; width: 100%; height: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%); mask-image: linear-gradient(180deg, #000 70%, transparent 100%);"></img>
+        <figcaption style="font-size: 13px; color: var(--color-neutral-500);">Restaurang 1923, Liseberg</figcaption>
+      </figure>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;snow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;closed&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { form: { name: '', email: '', allergy: '', attend: 'yes', diet: 'none', drink: 'alc' }, done: false, error: '' };
+  snowRef = React.createRef();
+
+  componentDidMount() { this.startSnow(); }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); window.removeEventListener('resize', this.onResize); }
+
+  startSnow() {
+    const c = this.snowRef.current; if (!c) return;
+    const ctx = c.getContext('2d');
+    const flakes = [];
+    this.onResize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round(c.offsetWidth * c.offsetHeight / 9000);
+      flakes.length = 0;
+      for (let i = 0; i < n; i++) flakes.push({ x: Math.random() * c.offsetWidth, y: Math.random() * c.offsetHeight, r: Math.random() * 1.8 + 0.4, s: Math.random() * 0.5 + 0.2, d: Math.random() * Math.PI * 2 });
+    };
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
+    const color = getComputedStyle(document.documentElement).getPropertyValue('--color-neutral-100').trim() || '#f3f5fe';
+    const tick = () => {
+      const w = c.offsetWidth, h = c.offsetHeight;
+      ctx.clearRect(0, 0, w, h);
+      if (this.props.snow ?? true) {
+        ctx.fillStyle = color;
+        for (const f of flakes) {
+          f.y += f.s; f.d += 0.01; f.x += Math.sin(f.d) * 0.3;
+          if (f.y > h + 4) { f.y = -4; f.x = Math.random() * w; }
+          ctx.globalAlpha = 0.25 + f.r * 0.25;
+          ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      this.raf = requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  set(k, v) { this.setState(s => ({ form: { ...s.form, [k]: v }, error: '' })); }
+
+  submit = (e) => {
+    e.preventDefault();
+    const f = this.state.form;
+    if (!f.name.trim()) return this.setState({ error: 'Fyll i ditt namn.' });
+    this.setState({ done: true });
+  };
+
+  renderVals() {
+    const { form, done, error } = this.state;
+    const closed = this.props.closed ?? false;
+    const yes = form.attend === 'yes';
+    const dietOpts = [['none', 'Inga önskemål'], ['veg', 'Vegetarisk'], ['vegan', 'Vegansk'], ['pesc', 'Pescetarian']];
+    const drinkOpts = [['alc', 'Med alkohol'], ['free', 'Alkoholfritt']];
+    const lab = (opts, v) => (opts.find(o => o[0] === v) || [])[1];
+    return {
+      snowRef: this.snowRef,
+      form,
+      showClosed: closed,
+      showDone: !closed && done,
+      showForm: !closed && !done,
+      attendYes: yes, attendNo: !yes,
+      setAttendYes: () => this.set('attend', 'yes'),
+      setAttendNo: () => this.set('attend', 'no'),
+      onName: e => this.set('name', e.target.value),
+      onEmail: e => this.set('email', e.target.value),
+      onAllergy: e => this.set('allergy', e.target.value),
+      diets: dietOpts.map(([v, l]) => ({ label: l, checked: form.diet === v, pick: () => this.set('diet', v) })),
+      drinks: drinkOpts.map(([v, l]) => ({ label: l, checked: form.drink === v, pick: () => this.set('drink', v) })),
+      hasError: !!error, error,
+      submit: this.submit,
+      submitLabel: yes ? 'Skicka anmälan' : 'Skicka svar',
+      edit: () => this.setState({ done: false }),
+      firstName: form.name.trim().split(' ')[0],
+      doneTitle: yes ? 'Vi ses på Liseberg den 10 december!' : 'Tråkigt att du inte kan komma',
+      doneBody: yes ? 'Din plats är bokad.' : 'Tack för att du svarade. God jul och gott nytt år!',
+      dietLabel: yes ? lab(dietOpts, form.diet) : '—',
+      drinkLabel: yes ? lab(drinkOpts, form.drink) : '—',
+      allergyLabel: yes && form.allergy.trim() ? form.allergy : '—',
+    };
+  }
+}
+</script>
+</body>
+</html>
