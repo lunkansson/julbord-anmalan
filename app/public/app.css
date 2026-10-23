@@ -10,18 +10,8 @@ a:hover { color: var(--color-accent-200); }
 }
 .snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-.topbar {
-  position: relative; max-width: 1120px; margin: 0 auto; padding: 22px 28px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
-.brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; }
-.brand-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--color-accent-200); box-shadow: 0 0 12px 3px var(--color-accent);
-}
-
 .layout {
-  position: relative; max-width: 1120px; margin: 0 auto; padding: 48px 28px 96px;
+  position: relative; max-width: 1120px; margin: 0 auto; padding: 80px 28px 96px;
   display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 64px; align-items: start;
 }
