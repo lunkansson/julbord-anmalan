@@ -54,7 +54,7 @@
       });
       const data = await res.json().catch(() => ({}));
       if (res.status === 403 && data.closed) { show('closed'); return; }
-      if (!res.ok) throw new Error(data.error || 'Något gick fel. Försök igen.');
+      if (!res.ok) throw new Error(data.error || `Något gick fel (fel ${res.status}). Försök igen.`);
       saved = { id: data.id, name: data.name };
       store.set(saved);
       showDone(saved.name);

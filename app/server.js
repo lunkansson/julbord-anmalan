@@ -17,6 +17,7 @@ const PUBLIC_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'publ
 // Same routes as the files in api/.
 const ROUTES = {
   'GET /api/status': h.status,
+  'GET /api/health': h.health,
   'GET /api/attendees': h.attendees,
   'POST /api/signups': h.signup,
   'GET /api/attendees-csv': h.attendeesCsv,

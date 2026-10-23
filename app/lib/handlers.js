@@ -40,7 +40,7 @@ const csvCell = (s) => {
 };
 
 function serverError(err) {
-  console.error(err);
+  console.error('[julbord]', err?.message || err);
   return json(500, { error: 'Något gick fel på servern. Försök igen.' });
 }
 
@@ -93,4 +93,45 @@ export async function attendeesCsv() {
       'Content-Disposition': 'attachment; filename="julbord-anmalda.csv"',
     },
   });
+}
+
+// Setup check at /api/health: says in plain Swedish what is missing, without revealing any keys.
+export async function health() {
+  const { SUPABASE_URL, SUPABASE_KEY } = await import('./config.js');
+  const checks = [];
+  const add = (ok, what, fix) => checks.push(ok ? { ok, what } : { ok, what, fix });
+
+  add(!!SUPABASE_URL, 'SUPABASE_URL är satt', 'Lägg in SUPABASE_URL i Vercel (Settings → Environment Variables) och gör Redeploy.');
+  if (SUPABASE_URL) add(/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(SUPABASE_URL), `SUPABASE_URL ser rätt ut (${SUPABASE_URL})`, 'Den ska se ut som https://xxxx.supabase.co');
+  add(!!SUPABASE_KEY, 'SUPABASE_SECRET_KEY är satt', 'Lägg in SUPABASE_SECRET_KEY i Vercel och gör Redeploy.');
+
+  if (SUPABASE_KEY) {
+    let kind = 'okänd';
+    if (SUPABASE_KEY.startsWith('sb_secret_')) kind = 'secret';
+    else if (SUPABASE_KEY.startsWith('sb_publishable_')) kind = 'publishable';
+    else if (SUPABASE_KEY.startsWith('eyJ')) {
+      try { kind = JSON.parse(Buffer.from(SUPABASE_KEY.split('.')[1], 'base64url').toString()).role || kind; } catch { /* keep */ }
+    }
+    add(kind === 'secret' || kind === 'service_role', `Nyckeln är av typen "${kind}"`,
+      'Fel nyckel: använd en secret key (sb_secret_…) eller service_role-nyckeln, inte publishable/anon.');
+  }
+
+  if (SUPABASE_URL && SUPABASE_KEY) {
+    try {
+      const headers = { apikey: SUPABASE_KEY };
+      if (SUPABASE_KEY.startsWith('eyJ')) headers.Authorization = `Bearer ${SUPABASE_KEY}`;
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/signups?select=id&limit=1`, { headers });
+      const body = await res.text();
+      let fix = `Supabase svarade ${res.status}: ${body.slice(0, 300)}`;
+      if (/PGRST205|42P01|does not exist|Could not find the table/i.test(body)) fix = 'Tabellen signups finns inte. Kör SQL:en från app/supabase/schema.sql i Supabase SQL Editor.';
+      else if (res.status === 401) fix = 'Supabase godtar inte nyckeln. Kopiera secret key på nytt och kontrollera att den hör till samma projekt som SUPABASE_URL.';
+      else if (/42501|permission denied/i.test(body)) fix = 'Behörighet saknas. Kör SQL:en från app/supabase/schema.sql igen (raden med grant).';
+      add(res.ok, 'Kan läsa tabellen signups i Supabase', fix);
+    } catch (err) {
+      add(false, 'Kan nå Supabase', `Kunde inte ansluta: ${err.message}. Kontrollera SUPABASE_URL.`);
+    }
+  }
+
+  const ok = checks.every((c) => c.ok);
+  return json(ok ? 200 : 500, { ok, summary: ok ? 'Allt ser bra ut.' : 'Något behöver åtgärdas – se "fix".', checks });
 }
