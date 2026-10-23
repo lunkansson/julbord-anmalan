@@ -1,25 +1,70 @@
-# CODING AGENTS: READ THIS FIRST
+# Julbord-anmälan – Konsultjulbord 2026 på Liseberg
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Anmälningssida för konsultjulbordet torsdag 10 december. Byggd från Claude Design-prototypen
+`design/project/Julbord Anmälan.dc.html` (Nocturne-designsystemet) som ren HTML/CSS/JS. Körs på Vercel
+och sparar anmälningarna i Supabase. Inga npm-paket behövs.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Publicera (Supabase + Vercel)
 
-## What you should do — IMPORTANT
+### 1. Supabase – skapa tabellen
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+1. Öppna projektet på [supabase.com/dashboard](https://supabase.com/dashboard).
+2. **SQL Editor → New query**, klistra in innehållet i [`supabase/schema.sql`](supabase/schema.sql) och klicka **Run**.
+3. Hämta två värden under **Project Settings → API Keys** / **Data API**:
+   - **Project URL**, t.ex. `https://abcdefgh.supabase.co`
+   - en **secret key** (`sb_secret_…`), eller den äldre **service_role**-nyckeln.
+     Den här nyckeln ska bara in i Vercel, aldrig i koden eller i webbläsaren.
 
-**Read `project/Julbord Anmälan.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+### 2. Vercel – importera repot
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+1. [vercel.com/new](https://vercel.com/new) → importera `lunkansson/julbord-anmalan`.
+2. Låt alla inställningar stå kvar som de är (Framework Preset: Other, Root Directory: `./`).
+3. Lägg till miljövariabler (Environment Variables):
 
-## About the design files
+   | Namn | Värde |
+   | --- | --- |
+   | `SUPABASE_URL` | Project URL från Supabase |
+   | `SUPABASE_SECRET_KEY` | secret key (eller service_role-nyckeln) |
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+4. **Deploy**. Varje push till `main` publicerar sedan automatiskt.
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+Om du kopplar Supabase via Vercels Marketplace-integration sätts `SUPABASE_URL` och nyckeln åt dig;
+koden läser även `SUPABASE_SERVICE_ROLE_KEY`.
 
-## Bundle contents
+## Övriga inställningar (valfria)
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Liseberg julbord anmälning` project files (HTML prototypes, assets, components)
+| Variabel | Standard | Vad den gör |
+| --- | --- | --- |
+| `SIGNUP_DEADLINE` | `2026-10-28T23:59:59+01:00` | Efter detta stängs anmälan automatiskt |
+| `SIGNUPS_CLOSED` | – | Sätt till `1` för att stänga anmälan direkt |
+
+## Så fungerar det
+
+- Formuläret frågar bara efter namn.
+- Webbläsaren kommer ihåg anmälan, så "Ändra anmälan" uppdaterar samma rad. Samma namn två gånger
+  (oavsett stora/små bokstäver) räknas som en anmälan.
+- Alla som besöker sidan ser de första anmälda under datum och tider. Länken **Se alla som har anmält sig →** leder till
+  **`/anmalda`** med hela listan, sökning på namn och **Ladda ner listan (CSV)** för Excel. Ingen inloggning krävs.
+- Efter sista anmälningsdag visar sidan "Anmälan är stängd" och servern tar inte emot fler.
+- Det finns inget lösenord och ingen admin-sida. Behöver en anmälan tas bort (test, dubblett, någon som
+  inte kan komma) gör man det i Supabase: **Table Editor → signups**, markera raden och ta bort den.
+- Snöfallet stängs av för den som valt reducerad rörelse, eller med `?snow=0` i adressen.
+
+## Köra lokalt
+
+```sh
+npm start      # http://localhost:3000
+npm test
+```
+
+Utan Supabase-variabler sparas anmälningar i `data/signups.json`. Med `SUPABASE_URL` och
+`SUPABASE_SECRET_KEY` satta används Supabase även lokalt.
+
+## Filer
+
+- `public/` – anmälningssidan (`index.html`, `app.js`), listsidan (`anmalda.html`, `anmalda.js`), gemensamma `app.css` och `snow.js`, designsystemets `nocturne.css` och bilderna
+- `api/` – Vercel-funktioner (`/api/status`, `/api/signups`, `/api/attendees`, `/api/attendees-csv`)
+- `lib/` – logiken: inställningar, lagring (Supabase eller JSON-fil) och request-hantering
+- `server.js` – lokal server som kör samma kod som Vercel
+- `supabase/schema.sql` – tabellen i Supabase
+- `design/` – originalexporten från Claude Design (prototyp, chatt, designsystem), bara som referens
