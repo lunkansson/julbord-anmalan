@@ -34,7 +34,10 @@
         <h2 class="attendees-head">Anmälda <span class="attendees-count" id="att-count"></span></h2>
         <ul class="attendee-list" id="att-list"></ul>
         <p class="attendees-empty" id="att-empty" hidden>Ingen har anmält sig än – bli först!</p>
-        <button type="button" class="btn btn-ghost attendees-more" id="att-more" hidden></button>
+        <div class="attendees-actions">
+          <button type="button" class="btn btn-ghost attendees-more" id="att-more" hidden></button>
+          <a class="btn btn-ghost attendees-csv" id="att-csv" href="/api/attendees-csv" hidden>Ladda ner listan (CSV)</a>
+        </div>
       </div>
     </section>
 
@@ -77,10 +80,6 @@
       </figure>
     </div>
   </main>
-
-  <footer class="footer">
-    <a href="/admin">Arrangör</a>
-  </footer>
 </div>
 </body>
 </html>

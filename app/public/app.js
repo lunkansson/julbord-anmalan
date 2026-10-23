@@ -80,6 +80,7 @@
     $('att-count').textContent = allNames.length ? `· ${allNames.length}` : '';
     $('att-empty').hidden = allNames.length > 0;
     moreBtn.hidden = allNames.length <= SHOW_FIRST;
+    $('att-csv').hidden = allNames.length === 0;
     moreBtn.textContent = showAll ? 'Visa färre' : `Visa alla ${allNames.length}`;
     $('attendees').hidden = false;
   }

@@ -7,21 +7,19 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as h from './lib/handlers.js';
-import { DEADLINE, isClosed, ADMIN_PASSWORD } from './lib/config.js';
+import { DEADLINE, isClosed } from './lib/config.js';
 import { getStore } from './lib/store.js';
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 const PUBLIC_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'public');
 
-// Same routes as vercel.json.
+// Same routes as the files in api/.
 const ROUTES = {
   'GET /api/status': h.status,
   'GET /api/attendees': h.attendees,
   'POST /api/signups': h.signup,
-  'GET /admin': h.adminPage,
-  'GET /admin/signups.csv': h.adminCsv,
-  'POST /admin/delete': h.adminDelete,
+  'GET /api/attendees-csv': h.attendeesCsv,
 };
 
 const MIME = {
@@ -77,5 +75,4 @@ server.listen(PORT, HOST, () => {
   console.log(`Julbord-anmälan på http://localhost:${PORT}`);
   console.log(`Lagring: ${getStore().kind === 'supabase' ? 'Supabase' : 'lokal JSON-fil'}`);
   console.log(`Anmälan ${isClosed() ? 'är STÄNGD' : `öppen till ${DEADLINE.toISOString()}`}`);
-  console.log(ADMIN_PASSWORD ? 'Admin: /admin' : 'Admin avstängt (sätt ADMIN_PASSWORD för att aktivera /admin)');
 });

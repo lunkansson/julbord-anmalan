@@ -7,7 +7,6 @@ if (Number.isNaN(DEADLINE.getTime())) throw new Error(`Ogiltigt SIGNUP_DEADLINE:
 const FORCE_CLOSED = /^(1|true|yes)$/i.test(process.env.SIGNUPS_CLOSED || '');
 export const isClosed = () => FORCE_CLOSED || Date.now() > DEADLINE.getTime();
 
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 export const MAX_NAME = 100;
 
 // Accepts both https://<ref>.supabase.co and the full REST address https://<ref>.supabase.co/rest/v1/

@@ -2,11 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "outputDirectory": "public",
-  "rewrites": [
-    { "source": "/admin", "destination": "/api/admin" },
-    { "source": "/admin/signups.csv", "destination": "/api/admin-csv" },
-    { "source": "/admin/delete", "destination": "/api/admin-delete" }
-  ],
   "headers": [
     {
       "source": "/(.*)",

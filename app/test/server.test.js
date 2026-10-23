@@ -13,7 +13,7 @@ function start(env) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'julbord-'));
   const dataFile = path.join(dir, 'signups.json');
   const proc = spawn(process.execPath, [path.join(__dirname, '..', 'server.js')], {
-    env: { ...process.env, SUPABASE_URL: '', SUPABASE_SECRET_KEY: '', SUPABASE_SERVICE_ROLE_KEY: '', PORT: String(port), HOST: '127.0.0.1', DATA_FILE: dataFile, ADMIN_PASSWORD: 'hemligt', ...env },
+    env: { ...process.env, SUPABASE_URL: '', SUPABASE_SECRET_KEY: '', SUPABASE_SERVICE_ROLE_KEY: '', PORT: String(port), HOST: '127.0.0.1', DATA_FILE: dataFile, ...env },
     stdio: ['ignore', 'pipe', 'inherit'],
   });
   const ready = new Promise((resolve) => proc.stdout.on('data', (d) => { if (String(d).includes('http://')) resolve(); }));
@@ -21,7 +21,6 @@ function start(env) {
 }
 
 const post = (base, body) => fetch(`${base}/api/signups`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-const auth = { Authorization: 'Basic ' + Buffer.from('admin:hemligt').toString('base64') };
 
 let open, closed;
 before(async () => {
@@ -77,25 +76,14 @@ test('rejects sign-ups after the deadline', async () => {
   assert.equal((await res.json()).closed, true);
 });
 
-test('admin requires password and exports CSV', async () => {
-  assert.equal((await fetch(`${open.base}/admin`)).status, 401);
+test('anyone can download the list as CSV; admin pages are gone', async () => {
   await post(open.base, { name: '=HYPERLINK("x")' });
-  const page = await (await fetch(`${open.base}/admin`, { headers: auth })).text();
-  assert.match(page, /anmälda/);
-  assert.doesNotMatch(page, /<script>alert/);
-  const csv = await (await fetch(`${open.base}/admin/signups.csv`, { headers: auth })).text();
+  const res = await fetch(`${open.base}/api/attendees-csv`);
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get('content-disposition'), /attachment/);
+  const csv = await res.text();
+  assert.match(csv, /"Namn";"Anmäld"/);
   assert.match(csv, /"'=HYPERLINK/);
-});
-
-test('admin delete blocks cross-site posts', async () => {
-  const { id } = await (await post(open.base, { name: 'Ta Bort' })).json();
-  const del = (origin) => fetch(`${open.base}/admin/delete`, {
-    method: 'POST', redirect: 'manual',
-    headers: { ...auth, 'Content-Type': 'application/x-www-form-urlencoded', Origin: origin },
-    body: `id=${id}`,
-  });
-  assert.equal((await del('https://evil.example')).status, 403);
-  assert.equal((await del(open.base)).status, 303);
-  const page = await (await fetch(`${open.base}/admin`, { headers: auth })).text();
-  assert.doesNotMatch(page, /Ta Bort/);
+  assert.equal((await fetch(`${open.base}/admin`)).status, 404);
+  assert.equal((await fetch(`${open.base}/admin/delete`, { method: 'POST', body: 'id=x' })).status, 405);
 });

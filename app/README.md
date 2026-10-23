@@ -25,7 +25,6 @@ och sparar anmälningarna i Supabase. Inga npm-paket behövs.
    | --- | --- |
    | `SUPABASE_URL` | Project URL från Supabase |
    | `SUPABASE_SECRET_KEY` | secret key (eller service_role-nyckeln) |
-   | `ADMIN_PASSWORD` | ett lösenord du väljer för `/admin` |
 
 4. **Deploy**. Varje push till `main` publicerar sedan automatiskt.
 
@@ -46,15 +45,16 @@ koden läser även `SUPABASE_SERVICE_ROLE_KEY`.
   (oavsett stora/små bokstäver) räknas som en anmälan.
 - Alla som besöker sidan ser listan **Anmälda** (bara namn) under datum och tider. Den uppdateras direkt när någon anmäler sig.
 - Efter sista anmälningsdag visar sidan "Anmälan är stängd" och servern tar inte emot fler.
-- `/admin` (valfritt användarnamn + `ADMIN_PASSWORD`) visar alla anmälda, kan ta bort rader och
-  laddar ner en CSV som öppnas direkt i Excel. Anmälningarna syns också i Supabase under **Table Editor → signups**.
+- Under listan finns **Ladda ner listan (CSV)**, en fil som öppnas direkt i Excel.
+- Det finns inget lösenord och ingen admin-sida. Behöver en anmälan tas bort (test, dubblett, någon som
+  inte kan komma) gör man det i Supabase: **Table Editor → signups**, markera raden och ta bort den.
 - Snöfallet stängs av för den som valt reducerad rörelse, eller med `?snow=0` i adressen.
 
 ## Köra lokalt
 
 ```sh
 cd app
-ADMIN_PASSWORD=test npm start      # http://localhost:3000
+npm start      # http://localhost:3000
 npm test
 ```
 
@@ -64,7 +64,7 @@ Utan Supabase-variabler sparas anmälningar i `app/data/signups.json`. Med `SUPA
 ## Filer
 
 - `public/` – sidan (`index.html`, `app.css`, `app.js`), designsystemets `nocturne.css` och bilderna
-- `api/` – Vercel-funktioner; `vercel.json` kopplar `/admin…` till dem
+- `api/` – Vercel-funktioner (`/api/status`, `/api/signups`, `/api/attendees`, `/api/attendees-csv`)
 - `lib/` – logiken: inställningar, lagring (Supabase eller JSON-fil) och request-hantering
 - `server.js` – lokal server som kör samma kod som Vercel
 - `supabase/schema.sql` – tabellen i Supabase
