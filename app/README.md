@@ -43,9 +43,9 @@ koden läser även `SUPABASE_SERVICE_ROLE_KEY`.
 - Formuläret frågar bara efter namn.
 - Webbläsaren kommer ihåg anmälan, så "Ändra anmälan" uppdaterar samma rad. Samma namn två gånger
   (oavsett stora/små bokstäver) räknas som en anmälan.
-- Alla som besöker sidan ser listan **Anmälda** (bara namn) under datum och tider. Den uppdateras direkt när någon anmäler sig.
+- Alla som besöker sidan ser de första anmälda under datum och tider. Länken **Se alla som har anmält sig →** leder till
+  **`/anmalda`** med hela listan, sökning på namn och **Ladda ner listan (CSV)** för Excel. Ingen inloggning krävs.
 - Efter sista anmälningsdag visar sidan "Anmälan är stängd" och servern tar inte emot fler.
-- Under listan finns **Ladda ner listan (CSV)**, en fil som öppnas direkt i Excel.
 - Det finns inget lösenord och ingen admin-sida. Behöver en anmälan tas bort (test, dubblett, någon som
   inte kan komma) gör man det i Supabase: **Table Editor → signups**, markera raden och ta bort den.
 - Snöfallet stängs av för den som valt reducerad rörelse, eller med `?snow=0` i adressen.
@@ -63,7 +63,7 @@ Utan Supabase-variabler sparas anmälningar i `app/data/signups.json`. Med `SUPA
 
 ## Filer
 
-- `public/` – sidan (`index.html`, `app.css`, `app.js`), designsystemets `nocturne.css` och bilderna
+- `public/` – anmälningssidan (`index.html`, `app.js`), listsidan (`anmalda.html`, `anmalda.js`), gemensamma `app.css` och `snow.js`, designsystemets `nocturne.css` och bilderna
 - `api/` – Vercel-funktioner (`/api/status`, `/api/signups`, `/api/attendees`, `/api/attendees-csv`)
 - `lib/` – logiken: inställningar, lagring (Supabase eller JSON-fil) och request-hantering
 - `server.js` – lokal server som kör samma kod som Vercel
