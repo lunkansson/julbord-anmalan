@@ -44,6 +44,7 @@ koden läser även `SUPABASE_SERVICE_ROLE_KEY`.
 - Formuläret frågar bara efter namn.
 - Webbläsaren kommer ihåg anmälan, så "Ändra anmälan" uppdaterar samma rad. Samma namn två gånger
   (oavsett stora/små bokstäver) räknas som en anmälan.
+- Alla som besöker sidan ser listan **Anmälda** (bara namn) under datum och tider. Den uppdateras direkt när någon anmäler sig.
 - Efter sista anmälningsdag visar sidan "Anmälan är stängd" och servern tar inte emot fler.
 - `/admin` (valfritt användarnamn + `ADMIN_PASSWORD`) visar alla anmälda, kan ta bort rader och
   laddar ner en CSV som öppnas direkt i Excel. Anmälningarna syns också i Supabase under **Table Editor → signups**.

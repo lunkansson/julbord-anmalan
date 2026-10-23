@@ -76,6 +76,14 @@ export async function signup(request) {
   }
 }
 
+// Public list shown on the page: names only, in alphabetical order.
+export async function attendees() {
+  try {
+    const names = (await getStore().list()).map((s) => s.name).sort((a, b) => a.localeCompare(b, 'sv'));
+    return json(200, { count: names.length, names });
+  } catch (err) { return serverError(err); }
+}
+
 // ---------- admin (HTTP Basic auth, any username + ADMIN_PASSWORD) ----------
 
 function denyAdmin(request) {

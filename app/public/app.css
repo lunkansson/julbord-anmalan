@@ -39,6 +39,22 @@ a:hover { color: var(--color-accent-200); }
 .facts dt, .summary dt { color: var(--color-neutral-500); }
 .facts dd, .summary dd { margin: 0; }
 
+/* Who's coming — public list under the facts */
+.attendees { display: flex; flex-direction: column; gap: 14px; max-width: 460px; }
+.attendees .fade-rule { margin-bottom: 14px; }
+.attendees-head {
+  margin: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--color-accent-300);
+}
+.attendees-count { color: var(--color-neutral-500); margin-left: 6px; }
+.attendee-list {
+  margin: 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px 24px; font-size: 15px;
+}
+.attendee-list li { overflow-wrap: anywhere; }
+.attendees-empty { margin: 0; color: var(--color-neutral-500); font-size: 15px; }
+.attendees-more { align-self: flex-start; padding-inline: 0; }
+
 /* Right column */
 .aside { display: flex; flex-direction: column; gap: 28px; }
 .signup {

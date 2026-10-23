@@ -28,6 +28,14 @@
         <dt>Julbord</dt><dd>19.30</dd>
         <dt>Sista anmälan</dt><dd>28 oktober</dd>
       </dl>
+
+      <div class="attendees" id="attendees" hidden>
+        <div class="fade-rule" aria-hidden="true"></div>
+        <h2 class="attendees-head">Anmälda <span class="attendees-count" id="att-count"></span></h2>
+        <ul class="attendee-list" id="att-list"></ul>
+        <p class="attendees-empty" id="att-empty" hidden>Ingen har anmält sig än – bli först!</p>
+        <button type="button" class="btn btn-ghost attendees-more" id="att-more" hidden></button>
+      </div>
     </section>
 
     <div class="aside">
@@ -71,7 +79,7 @@
   </main>
 
   <footer class="footer">
-    <a href="/admin">Arrangör – se anmälda</a>
+    <a href="/admin">Arrangör</a>
   </footer>
 </div>
 </body>

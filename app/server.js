@@ -17,6 +17,7 @@ const PUBLIC_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'publ
 // Same routes as vercel.json.
 const ROUTES = {
   'GET /api/status': h.status,
+  'GET /api/attendees': h.attendees,
   'POST /api/signups': h.signup,
   'GET /admin': h.adminPage,
   'GET /admin/signups.csv': h.adminCsv,

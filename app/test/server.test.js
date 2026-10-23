@@ -63,6 +63,14 @@ test('stores, edits and de-duplicates sign-ups', async () => {
   assert.equal((await post(open.base, { name: 'anna ek', id: b.id })).status, 409);
 });
 
+test('public attendee list shows names only', async () => {
+  await post(open.base, { name: 'Örjan Öst' });
+  const res = await (await fetch(`${open.base}/api/attendees`)).json();
+  assert.ok(res.names.includes('Örjan Öst'));
+  assert.equal(res.count, res.names.length);
+  assert.ok(res.names.every((n) => typeof n === 'string'));
+});
+
 test('rejects sign-ups after the deadline', async () => {
   const res = await post(closed.base, { name: 'Sen Person' });
   assert.equal(res.status, 403);

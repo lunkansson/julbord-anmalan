@@ -58,6 +58,7 @@
       saved = { id: data.id, name: data.name };
       store.set(saved);
       showDone(saved.name);
+      loadAttendees();
     } catch (err) {
       setError(err instanceof TypeError ? 'Kunde inte nå servern. Kontrollera din uppkoppling och försök igen.' : err.message);
     } finally {
@@ -65,6 +66,33 @@
       submitBtn.textContent = 'Skicka anmälan';
     }
   });
+
+  // Public list of who has signed up.
+  const SHOW_FIRST = window.matchMedia('(max-width: 600px)').matches ? 8 : 16;
+  let allNames = [];
+  let showAll = false;
+  const moreBtn = $('att-more');
+
+  function renderAttendees() {
+    const list = $('att-list');
+    const names = showAll ? allNames : allNames.slice(0, SHOW_FIRST);
+    list.replaceChildren(...names.map((n) => Object.assign(document.createElement('li'), { textContent: n })));
+    $('att-count').textContent = allNames.length ? `· ${allNames.length}` : '';
+    $('att-empty').hidden = allNames.length > 0;
+    moreBtn.hidden = allNames.length <= SHOW_FIRST;
+    moreBtn.textContent = showAll ? 'Visa färre' : `Visa alla ${allNames.length}`;
+    $('attendees').hidden = false;
+  }
+
+  function loadAttendees() {
+    return fetch('/api/attendees', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+      .then((d) => { allNames = d.names; renderAttendees(); })
+      .catch(() => { /* list stays hidden */ });
+  }
+
+  moreBtn.addEventListener('click', () => { showAll = !showAll; renderAttendees(); });
+  loadAttendees();
 
   // Initial state: closed beats everything; otherwise show an earlier sign-up from this browser.
   fetch('/api/status')
