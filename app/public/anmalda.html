@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anmälda – Julbord på Liseberg 2026</title>
+<meta name="description" content="Se vilka som har anmält sig till julbordet på Liseberg 10 december.">
+<meta name="theme-color" content="#161826">
+<link rel="stylesheet" href="/nocturne.css">
+<link rel="stylesheet" href="/app.css">
+<script src="/anmalda.js" defer></script>
+<script src="/snow.js" defer></script>
+</head>
+<body>
+<div class="page">
+  <canvas class="snow" id="snow" aria-hidden="true"></canvas>
+
+  <main class="list-page">
+    <a class="back-link" href="/">← Till anmälan</a>
+
+    <header class="list-head">
+      <div class="kicker">Julbord på Liseberg · 10 december</div>
+      <h1 class="list-title">Anmälda <span class="list-count" id="count"></span></h1>
+    </header>
+
+    <div class="list-tools" id="tools" hidden>
+      <div class="field list-search"><label for="q">Sök namn</label>
+        <input class="input" id="q" type="search" placeholder="Skriv ett namn" autocomplete="off"></div>
+      <a class="btn btn-secondary" href="/api/attendees-csv">Ladda ner listan (CSV)</a>
+    </div>
+
+    <section class="card elev-lg signup list-card" aria-live="polite">
+      <p class="muted-p" id="status">Hämtar listan…</p>
+      <ol class="full-list" id="list" hidden></ol>
+      <p class="muted-p" id="no-match" hidden>Ingen anmäld matchar sökningen.</p>
+    </section>
+
+    <a class="btn btn-primary list-cta" href="/#f-name">Anmäl dig</a>
+  </main>
+</div>
+</body>
+</html>

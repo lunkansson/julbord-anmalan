@@ -70,18 +70,18 @@
   // Public list of who has signed up.
   const SHOW_FIRST = window.matchMedia('(max-width: 600px)').matches ? 8 : 16;
   let allNames = [];
-  let showAll = false;
-  const moreBtn = $('att-more');
+  const moreLink = $('att-more');
 
   function renderAttendees() {
     const list = $('att-list');
-    const names = showAll ? allNames : allNames.slice(0, SHOW_FIRST);
+    const names = allNames.slice(0, SHOW_FIRST);
     list.replaceChildren(...names.map((n) => Object.assign(document.createElement('li'), { textContent: n })));
     $('att-count').textContent = allNames.length ? `· ${allNames.length}` : '';
     $('att-empty').hidden = allNames.length > 0;
-    moreBtn.hidden = allNames.length <= SHOW_FIRST;
-    $('att-csv').hidden = allNames.length === 0;
-    moreBtn.textContent = showAll ? 'Visa färre' : `Visa alla ${allNames.length}`;
+    moreLink.hidden = allNames.length === 0;
+    moreLink.textContent = allNames.length > SHOW_FIRST
+      ? `Se alla ${allNames.length} som har anmält sig →`
+      : 'Se alla som har anmält sig →';
     $('attendees').hidden = false;
   }
 
@@ -92,7 +92,6 @@
       .catch(() => { /* list stays hidden */ });
   }
 
-  moreBtn.addEventListener('click', () => { showAll = !showAll; renderAttendees(); });
   loadAttendees();
 
   // Initial state: closed beats everything; otherwise show an earlier sign-up from this browser.
@@ -101,46 +100,4 @@
     .then((s) => { if (s.closed) show('closed'); })
     .catch(() => { /* keep the form; the server will answer on submit */ });
   if (saved?.name) showDone(saved.name);
-
-  // Snowfall
-  const canvas = $('snow');
-  const params = new URLSearchParams(location.search);
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (params.get('snow') === '0' || reduceMotion || !canvas.getContext) return;
-
-  const ctx = canvas.getContext('2d');
-  const flakes = [];
-  const color = getComputedStyle(document.documentElement).getPropertyValue('--color-neutral-100').trim() || '#f3f5fe';
-  let w = 0, h = 0;
-
-  function resize() {
-    const dpr = window.devicePixelRatio || 1;
-    const nw = canvas.offsetWidth, nh = canvas.offsetHeight;
-    if (nw === w && nh === h) return;
-    w = nw; h = nh;
-    canvas.width = w * dpr; canvas.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.round((w * h) / 9000);
-    flakes.length = 0;
-    for (let i = 0; i < n; i++) {
-      flakes.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.8 + 0.4, s: Math.random() * 0.5 + 0.2, d: Math.random() * Math.PI * 2 });
-    }
-  }
-
-  function tick() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = color;
-    for (const f of flakes) {
-      f.y += f.s; f.d += 0.01; f.x += Math.sin(f.d) * 0.3;
-      if (f.y > h + 4) { f.y = -4; f.x = Math.random() * w; }
-      ctx.globalAlpha = 0.25 + f.r * 0.25;
-      ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
-    }
-    requestAnimationFrame(tick);
-  }
-
-  resize();
-  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(canvas);
-  else window.addEventListener('resize', resize);
-  tick();
 })();

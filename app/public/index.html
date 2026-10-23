@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="nocturne.css">
 <link rel="stylesheet" href="app.css">
 <script src="app.js" defer></script>
+<script src="snow.js" defer></script>
 </head>
 <body>
 <div class="page">
@@ -35,8 +36,7 @@
         <ul class="attendee-list" id="att-list"></ul>
         <p class="attendees-empty" id="att-empty" hidden>Ingen har anmält sig än – bli först!</p>
         <div class="attendees-actions">
-          <button type="button" class="btn btn-ghost attendees-more" id="att-more" hidden></button>
-          <a class="btn btn-ghost attendees-csv" id="att-csv" href="/api/attendees-csv" hidden>Ladda ner listan (CSV)</a>
+          <a class="btn btn-ghost" id="att-more" href="/anmalda" hidden>Se alla som har anmält sig →</a>
         </div>
       </div>
     </section>

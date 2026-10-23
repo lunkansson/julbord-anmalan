@@ -33,6 +33,8 @@ after(() => { open.proc.kill(); closed.proc.kill(); });
 test('serves the page and assets', async () => {
   const html = await (await fetch(`${open.base}/`)).text();
   assert.match(html, /God jul på/);
+  assert.match(html, /href="\/anmalda"/);
+  assert.match(await (await fetch(`${open.base}/anmalda`)).text(), /<h1 class="list-title">Anmälda/);
   assert.equal((await fetch(`${open.base}/assets/1923.jpg`)).headers.get('content-type'), 'image/jpeg');
   assert.equal((await fetch(`${open.base}/..%2fserver.js`)).status, 404);
 });

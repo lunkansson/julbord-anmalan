@@ -31,6 +31,7 @@ async function serveStatic(req, res, pathname) {
   let rel;
   try { rel = decodeURIComponent(pathname); } catch { res.writeHead(400).end(); return; }
   if (rel.endsWith('/')) rel += 'index.html';
+  else if (!path.extname(rel)) rel += '.html'; // clean URLs like /anmalda, as on Vercel
   const file = path.join(PUBLIC_DIR, path.normalize(rel));
   try {
     if (!file.startsWith(PUBLIC_DIR + path.sep)) throw new Error('outside public');
