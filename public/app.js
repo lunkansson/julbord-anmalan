@@ -77,19 +77,18 @@
     const names = allNames.slice(0, SHOW_FIRST);
     list.replaceChildren(...names.map((n) => Object.assign(document.createElement('li'), { textContent: n })));
     $('att-count').textContent = allNames.length ? `· ${allNames.length}` : '';
+    list.hidden = allNames.length === 0;
     $('att-empty').hidden = allNames.length > 0;
-    moreLink.hidden = allNames.length === 0;
     moreLink.textContent = allNames.length > SHOW_FIRST
       ? `Se alla ${allNames.length} som har anmält sig →`
       : 'Se alla som har anmält sig →';
-    $('attendees').hidden = false;
   }
 
   function loadAttendees() {
     return fetch('/api/attendees', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : Promise.reject(r)))
       .then((d) => { allNames = d.names; renderAttendees(); })
-      .catch(() => { /* list stays hidden */ });
+      .catch(() => { /* the link to /anmalda is still there */ });
   }
 
   loadAttendees();
