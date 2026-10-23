@@ -11,7 +11,7 @@ a:hover { color: var(--color-accent-200); }
 .snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
 .layout {
-  position: relative; max-width: 1120px; margin: 0 auto; padding: 80px 28px 96px;
+  position: relative; max-width: 1120px; margin: 0 auto; padding: 80px 28px 72px;
   display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 64px; align-items: start;
 }
@@ -77,3 +77,8 @@ a:hover { color: var(--color-accent-200); }
   mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
 }
 .photo figcaption { margin: 0; font-size: 16px; color: var(--color-neutral-300); }
+
+/* Small link for the organisers; the admin page itself is password protected. */
+.footer { position: relative; max-width: 1120px; margin: 0 auto; padding: 0 28px 32px; font-size: 13px; }
+.footer a { color: var(--color-neutral-600); text-decoration: none; }
+.footer a:hover { color: var(--color-neutral-300); text-decoration: underline; }

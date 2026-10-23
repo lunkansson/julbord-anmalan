@@ -99,14 +99,15 @@ export async function adminPage(request) {
     .join('');
   const state = isClosed() ? 'Stängd' : `Öppen till ${esc(fmtTime(DEADLINE.toISOString()))}`;
   const html = `<!DOCTYPE html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>Anmälningar – Konsultjulbord 2026</title><link rel="stylesheet" href="/nocturne.css"><link rel="stylesheet" href="/app.css">
+<meta name="robots" content="noindex"><title>Anmälningar – Julbord 2026</title><link rel="stylesheet" href="/nocturne.css"><link rel="stylesheet" href="/app.css">
 <style>.admin{max-width:900px;margin:0 auto;padding:40px 28px 80px;display:flex;flex-direction:column;gap:22px}.admin-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px}.admin form{margin:0}.table-wrap{overflow-x:auto}</style>
 </head><body><div class="page"><main class="admin">
-<div class="admin-head"><div class="stack-6"><div class="done-kicker">Konsultjulbord 2026</div><h1 class="card-h2" style="font-size:32px">${signups.length} anmälda</h1>
+<div class="admin-head"><div class="stack-6"><div class="done-kicker">Julbord 2026 · Liseberg</div><h1 class="card-h2" style="font-size:32px">${signups.length} anmälda</h1>
 <div class="text-muted">Anmälan: ${state}</div></div>
 <a class="btn btn-primary" href="/admin/signups.csv">Ladda ner CSV</a></div>
 <div class="card elev-md signup" style="padding:16px"><div class="table-wrap"><table class="table"><thead><tr><th>#</th><th>Namn</th><th>Anmäld</th><th></th></tr></thead>
 <tbody>${rows || '<tr><td colspan="4" class="text-muted">Inga anmälningar än.</td></tr>'}</tbody></table></div></div>
+<div class="footer" style="padding:0"><a href="/">← Till anmälningssidan</a></div>
 </main></div><script src="/admin.js"></script></body></html>`;
   return new Response(html, { headers: { ...SECURITY_HEADERS, ...NO_STORE, 'Content-Type': 'text/html; charset=utf-8' } });
 }
