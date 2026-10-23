@@ -76,4 +76,8 @@ a:hover { color: var(--color-accent-200); }
   -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
 }
-.photo figcaption { font-size: 13px; color: var(--color-neutral-500); }
+/* The caption sits up in the photo's faded-out bottom edge. */
+.photo figcaption {
+  position: relative; margin-top: -44px; padding-left: 16px;
+  font-size: 16px; color: var(--color-neutral-300);
+}
