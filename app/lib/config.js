@@ -10,6 +10,8 @@ export const isClosed = () => FORCE_CLOSED || Date.now() > DEADLINE.getTime();
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 export const MAX_NAME = 100;
 
-export const SUPABASE_URL = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/+$/, '');
+// Accepts both https://<ref>.supabase.co and the full REST address https://<ref>.supabase.co/rest/v1/
+export const SUPABASE_URL = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '')
+  .trim().replace(/\/+$/, '').replace(/\/rest\/v1$/, '');
 // Supabase's newer "secret" key or the older "service_role" key. Server-side only, never sent to the browser.
 export const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
