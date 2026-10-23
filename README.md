@@ -23,7 +23,7 @@ och sparar anmälningarna i Supabase. Inga npm-paket behövs.
 
    | Namn | Värde |
    | --- | --- |
-   | `SUPABASE_URL` | Project URL från Supabase |
+   | `SUPABASE_URL` | valfri – adressen `https://uxururfjpxegxtexjuhg.supabase.co` är förinställd i koden |
    | `SUPABASE_SECRET_KEY` | secret key (eller service_role-nyckeln) |
 
 4. **Deploy**. Varje push till `main` publicerar sedan automatiskt.
