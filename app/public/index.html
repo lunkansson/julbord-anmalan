@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anmälan – Konsultjulbord 2026 på Liseberg</title>
+<meta name="description" content="Anmäl dig till konsultjulbordet på Liseberg torsdag 10 december.">
+<meta name="theme-color" content="#161826">
+<link rel="stylesheet" href="nocturne.css">
+<link rel="stylesheet" href="app.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div class="page">
+  <canvas class="snow" id="snow" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      Konsultjulbord 2026
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="intro">
+      <div class="kicker">Välkommen till årets julbord</div>
+      <h1 class="title">God jul på<img class="logo" src="assets/liseberg-logo.png" alt="Liseberg" width="1000" height="310"></h1>
+      <p class="lead">Ljusslingor, glögg och ett dukat julbord. Vi samlar alla konsulter för en kväll tillsammans — anmäl dig senast 28 oktober så vi kan boka rätt antal platser.</p>
+
+      <div class="fade-rule" aria-hidden="true"></div>
+
+      <dl class="facts">
+        <dt>Datum</dt><dd>Torsdag 10 december</dd>
+        <dt>Tid</dt><dd>18.00 – sent</dd>
+        <dt>Plats</dt><dd>Liseberg, Göteborg</dd>
+        <dt>Sista anmälan</dt><dd>28 oktober</dd>
+      </dl>
+    </section>
+
+    <div class="aside">
+      <section class="card elev-lg signup" aria-live="polite">
+        <div id="view-closed" class="stack-10" hidden>
+          <h2 class="card-h2">Anmälan är stängd</h2>
+          <p class="muted-p">Sista dag för anmälan har passerat. Hör av dig till din kontaktperson om du ändå vill följa med.</p>
+        </div>
+
+        <div id="view-done" class="stack-18" hidden>
+          <div class="done-kicker">Tack, <span id="done-first"></span></div>
+          <h2 class="done-title">Vi ses på Liseberg den 10 december!</h2>
+          <p class="muted-p">Din plats är bokad.</p>
+          <dl class="summary">
+            <dt>Namn</dt><dd id="done-name"></dd>
+          </dl>
+          <div class="actions">
+            <button type="button" class="btn btn-secondary" id="edit">Ändra anmälan</button>
+          </div>
+        </div>
+
+        <form id="view-form" class="signup-form" novalidate>
+          <div class="stack-6">
+            <h2 class="card-h2">Anmäl dig</h2>
+          </div>
+
+          <div class="field"><label for="f-name">Namn</label>
+            <input class="input" id="f-name" name="name" placeholder="För- och efternamn" autocomplete="name" maxlength="100" required></div>
+
+          <div class="form-error" id="form-error" role="alert" hidden></div>
+
+          <button type="submit" class="btn btn-primary btn-block submit" id="submit">Skicka anmälan</button>
+        </form>
+      </section>
+
+      <figure class="photo">
+        <img src="assets/1923.jpg" alt="Restaurang 1923 på Liseberg i vinterskrud" width="857" height="647">
+        <figcaption>Restaurang 1923, Liseberg</figcaption>
+      </figure>
+    </div>
+  </main>
+</div>
+</body>
+</html>

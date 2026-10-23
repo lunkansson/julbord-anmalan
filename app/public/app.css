@@ -1,0 +1,89 @@
+/* Page styles for the julbord sign-up. Tokens and components come from nocturne.css. */
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); }
+a { color: var(--color-accent-300); }
+a:hover { color: var(--color-accent-200); }
+[hidden] { display: none !important; }
+
+.page {
+  position: relative; min-height: 100vh; overflow: hidden;
+  background: radial-gradient(120% 70% at 15% 0%, var(--color-section) 0%, var(--color-bg) 62%);
+}
+.snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.topbar {
+  position: relative; max-width: 1120px; margin: 0 auto; padding: 22px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; }
+.brand-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--color-accent-200); box-shadow: 0 0 12px 3px var(--color-accent);
+}
+
+.layout {
+  position: relative; max-width: 1120px; margin: 0 auto; padding: 48px 28px 96px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 64px; align-items: start;
+}
+
+/* Left column */
+.intro { display: flex; flex-direction: column; gap: 28px; padding-top: 12px; }
+.kicker { font-size: 18px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-300); }
+.title {
+  margin: 0; font-family: var(--font-heading); font-weight: 500;
+  font-size: clamp(44px, 7vw, 76px); line-height: 1.02; letter-spacing: -0.03em; text-wrap: balance;
+}
+.logo { display: block; width: min(100%, 420px); height: auto; margin-top: 18px; }
+.lead {
+  margin: 0; max-width: 46ch; font-size: 17px; line-height: 1.6;
+  color: var(--color-neutral-300); text-wrap: pretty;
+}
+.fade-rule {
+  height: 1px; max-width: 460px;
+  background: linear-gradient(90deg, var(--color-divider) 0%, var(--color-divider) 70%, transparent 100%);
+}
+.facts {
+  margin: 0; display: grid; grid-template-columns: auto 1fr;
+  column-gap: 32px; row-gap: 14px; font-size: 15px; max-width: 460px;
+}
+.facts dt, .summary dt { color: var(--color-neutral-500); }
+.facts dd, .summary dd { margin: 0; }
+
+/* Right column */
+.aside { display: flex; flex-direction: column; gap: 28px; }
+.signup {
+  padding: 32px; display: flex; flex-direction: column; gap: 22px;
+  border: 1px solid var(--color-divider);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.stack-6 { display: flex; flex-direction: column; gap: 6px; }
+.stack-10 { display: flex; flex-direction: column; gap: 10px; }
+.stack-18 { display: flex; flex-direction: column; gap: 18px; }
+.card-h2 { margin: 0; font-weight: 500; font-size: 24px; }
+.muted-p { margin: 0; color: var(--color-neutral-300); line-height: 1.6; }
+
+.done-kicker { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-accent-300); }
+.done-title { margin: 0; font-weight: 500; font-size: 28px; line-height: 1.2; }
+.summary {
+  margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 24px; row-gap: 10px;
+  font-size: 14px; padding: 16px; border-radius: var(--radius-md); background: var(--color-accent-900);
+}
+.summary dd { overflow-wrap: anywhere; }
+.actions { display: flex; gap: 10px; }
+
+.signup-form { display: flex; flex-direction: column; gap: 20px; }
+.form-error {
+  font-size: 13px; color: var(--color-accent-200); padding: 10px 12px;
+  border-radius: var(--radius-md); background: var(--color-accent-900);
+}
+.submit { height: 44px; font-size: 15px; }
+
+.photo { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.photo img {
+  display: block; width: 100%; height: auto;
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+}
+.photo figcaption { font-size: 13px; color: var(--color-neutral-500); }
