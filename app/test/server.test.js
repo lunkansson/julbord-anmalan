@@ -1,17 +1,19 @@
-'use strict';
-const { test, before, after } = require('node:test');
-const assert = require('node:assert/strict');
-const { spawn } = require('node:child_process');
-const fs = require('node:fs');
-const os = require('node:os');
-const path = require('node:path');
+import { test, before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function start(env) {
   const port = 30000 + Math.floor(Math.random() * 20000);
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'julbord-'));
   const dataFile = path.join(dir, 'signups.json');
   const proc = spawn(process.execPath, [path.join(__dirname, '..', 'server.js')], {
-    env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', DATA_FILE: dataFile, ADMIN_PASSWORD: 'hemligt', ...env },
+    env: { ...process.env, SUPABASE_URL: '', SUPABASE_SECRET_KEY: '', SUPABASE_SERVICE_ROLE_KEY: '', PORT: String(port), HOST: '127.0.0.1', DATA_FILE: dataFile, ADMIN_PASSWORD: 'hemligt', ...env },
     stdio: ['ignore', 'pipe', 'inherit'],
   });
   const ready = new Promise((resolve) => proc.stdout.on('data', (d) => { if (String(d).includes('http://')) resolve(); }));
@@ -56,6 +58,9 @@ test('stores, edits and de-duplicates sign-ups', async () => {
   await new Promise((r) => setTimeout(r, 50));
   const saved = JSON.parse(fs.readFileSync(open.dataFile, 'utf8'));
   assert.deepEqual(saved.map((s) => s.name), ['Anna Ek']);
+  // Renaming onto someone else's name is refused.
+  const b = await (await post(open.base, { name: 'Bo Ek' })).json();
+  assert.equal((await post(open.base, { name: 'anna ek', id: b.id })).status, 409);
 });
 
 test('rejects sign-ups after the deadline', async () => {

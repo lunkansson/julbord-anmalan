@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Anmälningssida för konsultjulbordet på Liseberg 10 december 2026",
-  "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "test": "node --test test/*.test.js"
